@@ -7,7 +7,7 @@ trait ProgramVisitor<D, R> {
     fun visitMinusNode(node: MinusNode, data: D): R
     fun visitToLeftNode(node: ToLeftNode, data: D): R
     fun visitToRightNode(node: ToRightNode, data: D): R
-    fun visitWriteNode(node: WriteNode, data: D): R
+    fun visitPrintNode(node: PrintNode, data: D): R
     fun visitReadNode(node: ReadNode, data: D): R
     fun visitEmptyNode(node: EmptyNode, data: D): R
 }
@@ -39,8 +39,8 @@ trait ToRightNode : ProgramNode {
     override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitToRightNode(this, data)
 }
 
-trait WriteNode : ProgramNode {
-    override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitWriteNode(this, data)
+trait PrintNode : ProgramNode {
+    override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitPrintNode(this, data)
 }
 
 trait ReadNode : ProgramNode {

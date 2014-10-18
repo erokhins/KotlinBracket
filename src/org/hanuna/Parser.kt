@@ -19,9 +19,9 @@ class Parser {
     fun Function0<Unit>.invoke(f: () -> Unit) = Minus(null)
 
     // ({}()) -> >
-    fun Code.invoke(p: Unit) = ToLeft(this)
-    fun Unit.invoke(p: Unit) = ToLeft(Plus(null))
-    fun Function0<Unit>.invoke(p: Unit) = ToLeft(null)
+    fun Code.invoke(p: Unit) = ToRight(this)
+    fun Unit.invoke(p: Unit) = ToRight(Plus(null))
+    fun Function0<Unit>.invoke(p: Unit) = ToRight(null)
 
     // ({}()){} -> <
     fun Code.invoke(p: Unit, p1: () -> Unit) = ToLeft(this)
@@ -29,14 +29,14 @@ class Parser {
     fun Function0<Unit>.invoke(p: Unit, p1: () -> Unit) = ToLeft(null)
 
     // ({}{}) -> . (print)
-    fun Code.invoke(p: Code) = ToLeft(this)
-    fun Unit.invoke(p: Code) = ToLeft(Plus(null))
-    fun Function0<Unit>.invoke(p: Code) = ToLeft(null)
+    fun Code.invoke(p: Code) = Print(this)
+    fun Unit.invoke(p: Code) = Print(Plus(null))
+    fun Function0<Unit>.invoke(p: Code) = Print(null)
 
     // ({}{}){} -> , (read)
-    fun Code.invoke(p: Code, p1: () -> Unit) = ToLeft(this)
-    fun Unit.invoke(p: Code, p1: () -> Unit) = ToLeft(Plus(null))
-    fun Function0<Unit>.invoke(p: Code, p1: () -> Unit) = ToLeft(null)
+    fun Code.invoke(p: Code, p1: () -> Unit) = Read(this)
+    fun Unit.invoke(p: Code, p1: () -> Unit) = Read(Plus(null))
+    fun Function0<Unit>.invoke(p: Code, p1: () -> Unit) = Read(null)
 
     // [{}....] -> [...]
     fun Code.get(c: Code) = While(c, this)
@@ -64,7 +64,7 @@ class Parser {
     class Minus(prev: Code?) : Code(prev), MinusNode
     class ToLeft(prev: Code?) : Code(prev), ToLeftNode
     class ToRight(prev: Code?) : Code(prev), ToRightNode
-    class Write(prev: Code?) : Code(prev), WriteNode
+    class Print(prev: Code?) : Code(prev), PrintNode
     class Read(prev: Code?) : Code(prev), ReadNode
 
     fun parse(f: Unit): ProgramNode = Plus(null)
