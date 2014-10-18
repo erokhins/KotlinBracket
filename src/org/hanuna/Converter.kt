@@ -16,7 +16,9 @@ fun main(args: Array<String>) {
     println("Brainfuck: $result")
 
     val brainfuck = """
-+-+
+ ++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++
+ .>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.
+ ------.--------.>+.>.
     """
     println("Bracket: ")
     println(brainfuck.asBracket())
