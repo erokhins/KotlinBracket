@@ -41,25 +41,36 @@ class Parser {
     // [{}....] -> [...]
     fun Code.get(c: Code) = While(c, this)
     fun Code.get(p: Unit) = While(Plus(null), this)
-    fun Code.get(p: () -> Unit) = While(EmptyNode, this)
+    fun Code.get(p: () -> Unit) = While(null, this)
 
     fun Unit.get(c: Code) = While(c, Plus(null))
     fun Unit.get(p: Unit) = While(Plus(null), Plus(null))
-    fun Unit.get(p: () -> Unit) = While(EmptyNode, Plus(null))
+    fun Unit.get(p: () -> Unit) = While(null, Plus(null))
 
     fun Function0<Unit>.get(c: Code) = While(c, null)
     fun Function0<Unit>.get(p: Unit) = While(Plus(null), null)
-    fun Function0<Unit>.get(p: () -> Unit) = While(EmptyNode, null)
+    fun Function0<Unit>.get(p: () -> Unit) = While(null, null)
 
     abstract class Code(prev: Code?) : ProgramNode {
+        val first: Code
+
         override var next: ProgramNode? = null
             private set
-                ;{
-            if (prev != null) prev.next = this
+        ;{
+            if (prev == null) {
+                first = this
+            } else {
+                prev.next = this
+                first = prev.getF()
+            }
         }
-    }
 
-    class While(override val content: ProgramNode, prev: Code?): Code(prev), ProgramWhile
+        private fun getF(): Code = first
+     }
+
+    class While(lastContentNode: Code?, prev: Code?): Code(prev), ProgramWhile {
+        override val content: ProgramNode = if (lastContentNode == null) EmptyNode else lastContentNode.first
+    }
     class Plus(prev: Code?) : Code(prev), PlusNode
     class Minus(prev: Code?) : Code(prev), MinusNode
     class ToLeft(prev: Code?) : Code(prev), ToLeftNode
@@ -69,5 +80,5 @@ class Parser {
 
     fun parse(f: Unit): ProgramNode = Plus(null)
     fun parse(f: () -> Unit): ProgramNode = EmptyNode
-    fun parse(f: Code): ProgramNode = f
+    fun parse(f: Code): ProgramNode = f.first
 }

@@ -2,7 +2,7 @@ package org.hanuna
 
 
 object BrainFuckVisitor : ProgramVisitor<Unit, String> {
-    override fun visitWhile(programWhile: ProgramWhile, data: Unit): String = "[${programWhile.content.accept(this, Unit)}]"
+    override fun visitWhile(programWhile: ProgramWhile, data: Unit): String = render("[${programWhile.content.accept(this, Unit)}]", programWhile.next)
 
     override fun visitPlusNode(node: PlusNode, data: Unit): String = render("+", node.next)
 
@@ -31,7 +31,7 @@ class ProgramRunVisitor(private val input: Stream<Char>, private val out: (Char)
     private var offset = 0
 
     override fun visitWhile(programWhile: ProgramWhile, data: Unit) {
-        while (array[offset] != '\0') programWhile.content.accept(this, Unit)
+        while (array[offset] != 0.toChar()) programWhile.content.accept(this, Unit)
 
         programWhile.runNext()
     }
