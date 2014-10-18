@@ -9,6 +9,7 @@ trait ProgramVisitor<D, R> {
     fun visitToRightNode(node: ToRightNode, data: D): R
     fun visitWriteNode(node: WriteNode, data: D): R
     fun visitReadNode(node: ReadNode, data: D): R
+    fun visitEmptyNode(node: EmptyNode, data: D): R
 }
 
 trait ProgramNode {
@@ -46,12 +47,7 @@ trait ReadNode : ProgramNode {
     override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitReadNode(this, data)
 }
 
-abstract class ProgramNodeImpl(override val next: ProgramNode?) : ProgramNode
-
-class ProgramWhileImpl(override val content: ProgramNode, next: ProgramNode?): ProgramWhile, ProgramNodeImpl(next)
-class PlusNodeImpl(next: ProgramNode?) : ProgramNodeImpl(next), PlusNode
-class MinusNodeImpl(next: ProgramNode?) : ProgramNodeImpl(next), MinusNode
-class ToLeftNodeImpl(next: ProgramNode?) : ProgramNodeImpl(next), ToLeftNode
-class ToRightNodeImpl(next: ProgramNode?) : ProgramNodeImpl(next), ToRightNode
-class WriteNodeImpl(next: ProgramNode?) : ProgramNodeImpl(next), WriteNode
-class ReadNodeImpl(next: ProgramNode?) : ProgramNodeImpl(next), ReadNode
+object EmptyNode : ProgramNode {
+    override val next: ProgramNode? = null
+    override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitEmptyNode(this, data)
+}

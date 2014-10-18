@@ -1,0 +1,73 @@
+package org.hanuna
+
+
+class Parser {
+    /*
+    {}() = Unit
+    {} = Function0<Unit>
+    {}{} = Code
+     */
+
+    // () -> +
+    fun Code.invoke() = Plus(this)
+    fun Unit.invoke() = Plus(Plus(null))
+    //fun Function0<Unit>.invoke()
+
+    // ({}) -> -
+    fun Code.invoke(p: () -> Unit) = Minus(this)
+    fun Unit.invoke(p: () -> Unit) = Minus(Plus(null))
+    fun Function0<Unit>.invoke(f: () -> Unit) = Minus(null)
+
+    // ({}()) -> >
+    fun Code.invoke(p: Unit) = ToLeft(this)
+    fun Unit.invoke(p: Unit) = ToLeft(Plus(null))
+    fun Function0<Unit>.invoke(p: Unit) = ToLeft(null)
+
+    // ({}()){} -> <
+    fun Code.invoke(p: Unit, p1: () -> Unit) = ToLeft(this)
+    fun Unit.invoke(p: Unit, p1: () -> Unit) = ToLeft(Plus(null))
+    fun Function0<Unit>.invoke(p: Unit, p1: () -> Unit) = ToLeft(null)
+
+    // ({}{}) -> . (print)
+    fun Code.invoke(p: Code) = ToLeft(this)
+    fun Unit.invoke(p: Code) = ToLeft(Plus(null))
+    fun Function0<Unit>.invoke(p: Code) = ToLeft(null)
+
+    // ({}{}){} -> , (read)
+    fun Code.invoke(p: Code, p1: () -> Unit) = ToLeft(this)
+    fun Unit.invoke(p: Code, p1: () -> Unit) = ToLeft(Plus(null))
+    fun Function0<Unit>.invoke(p: Code, p1: () -> Unit) = ToLeft(null)
+
+    // [{}....] -> [...]
+    fun Code.get(c: Code) = While(c, this)
+    fun Code.get(p: Unit) = While(Plus(null), this)
+    fun Code.get(p: () -> Unit) = While(EmptyNode, this)
+
+    fun Unit.get(c: Code) = While(c, Plus(null))
+    fun Unit.get(p: Unit) = While(Plus(null), Plus(null))
+    fun Unit.get(p: () -> Unit) = While(EmptyNode, Plus(null))
+
+    fun Function0<Unit>.get(c: Code) = While(c, null)
+    fun Function0<Unit>.get(p: Unit) = While(Plus(null), null)
+    fun Function0<Unit>.get(p: () -> Unit) = While(EmptyNode, null)
+
+    abstract class Code(prev: Code?) : ProgramNode {
+        override var next: ProgramNode? = null
+            private set
+                ;{
+            if (prev != null) prev.next = this
+        }
+    }
+
+    class While(override val content: ProgramNode, prev: Code?): Code(prev), ProgramWhile
+    class Plus(prev: Code?) : Code(prev), PlusNode
+    class Minus(prev: Code?) : Code(prev), MinusNode
+    class ToLeft(prev: Code?) : Code(prev), ToLeftNode
+    class ToRight(prev: Code?) : Code(prev), ToRightNode
+    class Write(prev: Code?) : Code(prev), WriteNode
+    class Read(prev: Code?) : Code(prev), ReadNode
+
+    fun parse(f: Unit): ProgramNode = Plus(null)
+    fun parse(f: () -> Unit): ProgramNode = EmptyNode
+    fun parse(f: Code): ProgramNode = f
+}
