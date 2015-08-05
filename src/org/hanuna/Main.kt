@@ -2,7 +2,7 @@ package org.hanuna
 
 
 fun main(args: Array<String>) {
-    val runner = ProgramRunVisitor(streamOf()) {
+    val runner = ProgramRunVisitor(sequenceOf()) {
         print(it)
     }
 
@@ -15,6 +15,6 @@ fun main(args: Array<String>) {
 ()()()()()()()()()()()({}{})({}())({}{})()()()({}{})({})({})({})({})({})({})
 ({}{})({})({})({})({})({})({})({})({})({}{})({}())()({}{})({}())({}{})
 
-        ).accept(runner, Unit)
+        ).accept(runner , Unit)
     }
 }

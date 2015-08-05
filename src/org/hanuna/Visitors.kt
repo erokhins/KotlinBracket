@@ -26,7 +26,7 @@ object BrainFuckVisitor : ProgramVisitor<Unit, String> {
     }
 }
 
-class ProgramRunVisitor(private val input: Stream<Char>, private val out: (Char) -> Unit) : ProgramVisitor<Unit, Unit> {
+class ProgramRunVisitor(private val input: Sequence<Char>, private val out: (Char) -> Unit) : ProgramVisitor<Unit, Unit> {
     private val array = CharArray(30000)
     private var offset = 0
 

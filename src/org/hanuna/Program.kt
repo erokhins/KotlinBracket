@@ -1,7 +1,7 @@
 package org.hanuna
 
 
-trait ProgramVisitor<D, R> {
+interface ProgramVisitor<D, R> {
     fun visitWhile(programWhile: ProgramWhile, data: D): R
     fun visitPlusNode(node: PlusNode, data: D): R
     fun visitMinusNode(node: MinusNode, data: D): R
@@ -12,38 +12,38 @@ trait ProgramVisitor<D, R> {
     fun visitEmptyNode(node: EmptyNode, data: D): R
 }
 
-trait ProgramNode {
+interface ProgramNode {
     val next: ProgramNode?
 
     fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R
 }
 
-trait ProgramWhile : ProgramNode {
+interface ProgramWhile : ProgramNode {
     val content: ProgramNode
     override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitWhile(this, data)
 }
 
-trait PlusNode : ProgramNode {
+interface PlusNode : ProgramNode {
     override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitPlusNode(this, data)
 }
 
-trait MinusNode : ProgramNode {
+interface MinusNode : ProgramNode {
     override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitMinusNode(this, data)
 }
 
-trait ToLeftNode : ProgramNode {
+interface ToLeftNode : ProgramNode {
     override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitToLeftNode(this, data)
 }
 
-trait ToRightNode : ProgramNode {
+interface ToRightNode : ProgramNode {
     override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitToRightNode(this, data)
 }
 
-trait PrintNode : ProgramNode {
+interface PrintNode : ProgramNode {
     override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitPrintNode(this, data)
 }
 
-trait ReadNode : ProgramNode {
+interface ReadNode : ProgramNode {
     override fun <D, R> accept(visitor: ProgramVisitor<D, R>, data: D): R = visitor.visitReadNode(this, data)
 }
 

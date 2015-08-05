@@ -56,7 +56,7 @@ class Parser {
 
         override var next: ProgramNode? = null
             private set
-        ;{
+        init {
             if (prev == null) {
                 first = this
             } else {
