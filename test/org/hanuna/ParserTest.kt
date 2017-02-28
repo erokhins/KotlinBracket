@@ -7,7 +7,7 @@ public class ParserTest {
         assertEquals(expected, Parser().f().accept(BrainFuckVisitor, Unit))
     }
 
-    test fun simple() {
+    @test fun simple() {
         doTest("+[>><][]-") {
             parse(
                     {}()[
@@ -23,7 +23,7 @@ public class ParserTest {
         }
     }
 
-    test fun stub() {
+    @test fun stub() {
         doTest("",{
             parse(
                     {}
@@ -31,7 +31,7 @@ public class ParserTest {
         })
     }
 
-    test fun stub2() {
+    @test fun stub2() {
         doTest("+",{
             parse(
                     {}()
@@ -39,14 +39,14 @@ public class ParserTest {
         })
     }
 
-    test fun br() {
+    @test fun br() {
         doTest("[][][][]") {
             parse(
                     {}[{}][{}][{}][{}]
             )
         }
     }
-    test fun br2() {
+    @test fun br2() {
         doTest("[[][]][]") {
             parse(
                     {}[{}[{}][{}]][{}]

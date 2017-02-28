@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
 }
 
 
-fun String.asBracket(): String = StringBuilder {
+fun String.asBracket(): String = buildString {
     append("{}")
     for (cr in this@asBracket) {
         val to = when (cr) {

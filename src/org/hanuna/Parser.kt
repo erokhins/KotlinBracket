@@ -9,53 +9,53 @@ class Parser {
      */
 
     // () -> +
-    fun Code.invoke() = Plus(this)
-    fun Unit.invoke() = Plus(Plus(null))
+    operator fun Code.invoke() = Plus(this)
+    operator fun Unit.invoke() = Plus(Plus(null))
     //fun Function0<Unit>.invoke()
 
     // ({}) -> -
-    fun Code.invoke(p: () -> Unit) = Minus(this)
-    fun Unit.invoke(p: () -> Unit) = Minus(Plus(null))
-    fun Function0<Unit>.invoke(f: () -> Unit) = Minus(null)
+    operator fun Code.invoke(p: () -> Unit) = Minus(this)
+    operator fun Unit.invoke(p: () -> Unit) = Minus(Plus(null))
+    operator fun Function0<Unit>.invoke(f: () -> Unit) = Minus(null)
 
     // ({}()) -> >
-    fun Code.invoke(p: Unit) = ToRight(this)
-    fun Unit.invoke(p: Unit) = ToRight(Plus(null))
-    fun Function0<Unit>.invoke(p: Unit) = ToRight(null)
+    operator fun Code.invoke(p: Unit) = ToRight(this)
+    operator fun Unit.invoke(p: Unit) = ToRight(Plus(null))
+    operator fun Function0<Unit>.invoke(p: Unit) = ToRight(null)
 
     // ({}()){} -> <
-    fun Code.invoke(p: Unit, p1: () -> Unit) = ToLeft(this)
-    fun Unit.invoke(p: Unit, p1: () -> Unit) = ToLeft(Plus(null))
-    fun Function0<Unit>.invoke(p: Unit, p1: () -> Unit) = ToLeft(null)
+    operator fun Code.invoke(p: Unit, p1: () -> Unit) = ToLeft(this)
+    operator fun Unit.invoke(p: Unit, p1: () -> Unit) = ToLeft(Plus(null))
+    operator fun Function0<Unit>.invoke(p: Unit, p1: () -> Unit) = ToLeft(null)
 
     // ({}{}) -> . (print)
-    fun Code.invoke(p: Code) = Print(this)
-    fun Unit.invoke(p: Code) = Print(Plus(null))
-    fun Function0<Unit>.invoke(p: Code) = Print(null)
+    operator fun Code.invoke(p: Code) = Print(this)
+    operator fun Unit.invoke(p: Code) = Print(Plus(null))
+    operator fun Function0<Unit>.invoke(p: Code) = Print(null)
 
     // ({}{}){} -> , (read)
-    fun Code.invoke(p: Code, p1: () -> Unit) = Read(this)
-    fun Unit.invoke(p: Code, p1: () -> Unit) = Read(Plus(null))
-    fun Function0<Unit>.invoke(p: Code, p1: () -> Unit) = Read(null)
+    operator fun Code.invoke(p: Code, p1: () -> Unit) = Read(this)
+    operator fun Unit.invoke(p: Code, p1: () -> Unit) = Read(Plus(null))
+    operator fun Function0<Unit>.invoke(p: Code, p1: () -> Unit) = Read(null)
 
     // [{}....] -> [...]
-    fun Code.get(c: Code) = While(c, this)
-    fun Code.get(p: Unit) = While(Plus(null), this)
-    fun Code.get(p: () -> Unit) = While(null, this)
+    operator fun Code.get(c: Code) = While(c, this)
+    operator fun Code.get(p: Unit) = While(Plus(null), this)
+    operator fun Code.get(p: () -> Unit) = While(null, this)
 
-    fun Unit.get(c: Code) = While(c, Plus(null))
-    fun Unit.get(p: Unit) = While(Plus(null), Plus(null))
-    fun Unit.get(p: () -> Unit) = While(null, Plus(null))
+    operator fun Unit.get(c: Code) = While(c, Plus(null))
+    operator fun Unit.get(p: Unit) = While(Plus(null), Plus(null))
+    operator fun Unit.get(p: () -> Unit) = While(null, Plus(null))
 
-    fun Function0<Unit>.get(c: Code) = While(c, null)
-    fun Function0<Unit>.get(p: Unit) = While(Plus(null), null)
-    fun Function0<Unit>.get(p: () -> Unit) = While(null, null)
+    operator fun Function0<Unit>.get(c: Code) = While(c, null)
+    operator fun Function0<Unit>.get(p: Unit) = While(Plus(null), null)
+    operator fun Function0<Unit>.get(p: () -> Unit) = While(null, null)
 
     abstract class Code(prev: Code?) : ProgramNode {
         val first: Code
 
         override var next: ProgramNode? = null
-            private set
+            set
         init {
             if (prev == null) {
                 first = this
